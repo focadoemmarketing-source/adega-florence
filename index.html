@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dega Florence 🍻</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#0f0f0f;color:#fff}
+header{color:#ffcc00;text-align:center;font-weight:bold}
+.section{padding:12px}
+.section h2{border-left:5px solid #ffcc00;padding-left:12px;margin-bottom:21px}
+.item{display:flex;align-items:center;background:#1c1c1c;border-radius:10px;padding:8px;margin-bottom:8px}
+.item img{width:60px;height:60px;object-fit:cover;border-radius:8px;margin-right:10px}
+.info{flex:1}
+.info h3{margin:0;font-size:15px}
+.info p{margin:2px 0;font-size:12px;color:#ccc}
+.price{font-weight:bold;color:#ffcc00;font-size:14px}
+.qty-box{display:flex;align-items:center;gap:6px}
+.qty-box button{background:#ffcc00;border:none;padding:1px 6px;border-radius:7px;font-weight:bold;cursor:pointer}
+.qty{min-width:18px;text-align:center;font-weight:bold}
+#whatsappFooter {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 24px);
+  max-width: 520px;
+
+  background: #25D366;
+  color: #fff;
+  padding: 14px 18px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 14px;
+
+  box-shadow: 0 8px 18px rgba(0,0,0,.45);
+  z-index: 999;
+  cursor: pointer;
+}
+
+.top-banner {
+  background-image: url("img/banner.jpg"); /* sua imagem aqui */
+  background-size: cover;
+  background-position: center;
+  border-radius: 0 0 22px 22px;
+  overflow: hidden;
+}
+
+.banner-overlay {
+  background: linear-gradient(
+    rgba(0,0,0,0.70),
+    rgba(0,0,0,0.03)
+  );
+  padding: 28px 16px;
+}
+
+.banner-content {
+  max-width: 520px;
+  margin: auto;
+  text-align: center;
+}
+
+.banner-content h1 {
+  margin: 0;
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.banner-content p {
+  margin: 6px 0 12px;
+  font-size: 14px;
+  opacity: .95;
+}
+
+.banner-badge {
+  display: inline-block;
+  background: #25D366;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,.35);
+}
+
+/* respiro entre banner e menu */
+body h2:first-of-type {
+  margin-top: 18px;
+}
+
+
+.combo{
+  border:2px solid #ffcc00;
+  background:linear-gradient(135deg,#1f1f1f,#2a2a2a);
+}
+#whatsappFooter .left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+#whatsappFooter .left strong {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#whatsappFooter .right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+#whatsappFooter img {
+  width: 26px;
+  height: 26px;
+}
+
+#badge {
+  background: red;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+#totalValue {
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+@keyframes addPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.item.animate {
+  animation: addPulse 0.25s ease;
+}
+@keyframes badgePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+#badge.pulse {
+  animation: badgePulse 0.3s ease;
+}
+
+#paymentModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.hidden { display: none; }
+
+.modal-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 15px;
+}
+
+.modal-box p {
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.modal-box button {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="top-banner">
+  <div class="banner-overlay">
+    <div class="banner-content">
+      <h1>🍻 ADEGA FLORENCE</h1>
+      <p>DELIVERY RÁPIDO • ENTREGA GELADA</p>
+    </div>
+  </div>
+</header>
+<!-- 🔥 COMBOS -->
+<div class="section">
+<h2>🔥 Combos em Destaque</h2>
+
+<div class="item combo" data-name="Combo 3 Skol + Gelo" data-price="18">
+<img src="img/combo.jpg">
+<div class="info">
+<h3>Combo Cerveja Gelada</h3>
+<p>Três latas de cerveja (Skol, Brahma ou Itaipava) acompanha gelo.
+<div class="price">R$ 16,90</div>
+</div>
+<div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div>
+</div>
+
+<div class="item combo" data-name="Combo 3 Skol + Gelo" data-price="18">
+<img src="img/combo.jpg">
+<div class="info">
+<h3>Combo Cerveja Gelada</h3>
+<p>Três latas de cerveja (Skol, Brahma ou Itaipava) acompanha gelo.
+<div class="price">R$ 16,90</div>
+</div>
+<div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div>
+</div>
+
+<div class="item combo" data-name="Combo 3 Skol + Gelo" data-price="18">
+<img src="img/combo.jpg">
+<div class="info">
+<h3>Combo Cerveja Gelada</h3>
+<p>Três latas de cerveja (Skol, Brahma ou Itaipava) acompanha gelo.
+<div class="price">R$ 16,90</div>
+</div>
+<div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div>
+</div>
+
+<div class="item combo" data-name="Combo 3 Skol + Gelo" data-price="18">
+<img src="img/combo.jpg">
+<div class="info">
+<h3>Combo Cerveja Gelada</h3>
+<p>Três latas de cerveja (Skol, Brahma ou Itaipava) acompanha gelo.
+<div class="price">R$ 16,90</div>
+</div>
+<div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div>
+</div>
+
+<div class="item combo" data-name="Combo 3 Skol + Gelo" data-price="18">
+<img src="img/combo.jpg">
+<div class="info">
+<h3>Combo Cerveja Gelada</h3>
+<p>Três latas de cerveja (Skol, Brahma ou Itaipava) acompanha gelo.
+<div class="price">R$ 16,90</div>
+</div>
+<div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div>
+</div>
+
+<div class="item combo" data-name="Combo 3 Skol + Gelo" data-price="18">
+<img src="img/combo.jpg">
+<div class="info">
+<h3>Combo Cerveja Gelada</h3>
+<p>Três latas de cerveja (Skol, Brahma ou Itaipava) acompanha gelo.
+<div class="price">R$ 16,90</div>
+</div>
+<div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div>
+</div>
+
+<div class="item combo" data-name="Combo 3 Skol + Gelo" data-price="18">
+<img src="img/combo.jpg">
+<div class="info">
+<h3>Combo Cerveja Gelada</h3>
+<p>Três latas de cerveja (Skol, Brahma ou Itaipava) acompanha gelo.
+<div class="price">R$ 16,90</div>
+</div>
+<div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div>
+</div>
+
+<div class="item combo" data-name="Combo 3 Skol + Gelo" data-price="18">
+<img src="img/combo.jpg">
+<div class="info">
+<h3>Combo Cerveja Gelada</h3>
+<p>Três latas de cerveja (Skol, Brahma ou Itaipava) acompanha gelo.
+<div class="price">R$ 16,90</div>
+</div>
+<div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div>
+</div>
+
+<div class="item combo" data-name="Combo 3 Skol + Gelo" data-price="18">
+<img src="img/combo.jpg">
+<div class="info">
+<h3>Combo Cerveja Gelada</h3>
+<p>Três latas de cerveja (Skol, Brahma ou Itaipava) acompanha gelo.
+<div class="price">R$ 16,90</div>
+</div>
+<div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div>
+</div>
+
+<div class="item combo" data-name="Combo 3 Skol + Gelo" data-price="18">
+<img src="img/combo.jpg">
+<div class="info">
+<h3>Combo Cerveja Gelada</h3>
+<p>Três latas de cerveja (Skol, Brahma ou Itaipava) acompanha gelo.
+<div class="price">R$ 16,90</div>
+</div>
+<div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div>
+</div>
+
+
+</div>
+
+
+<!-- 🍺 CERVEJAS -->
+<div class="section">
+<h2>🍺 Cervejas</h2>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+
+
+</div>
+
+<!-- 🥃 DESTILADOS -->
+<div class="section">
+<h2>🥃 Destilados, Cachaças & Gins</h2>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+</div>
+
+<!-- 🥤 REFRIGERANTES & ENERGÉTICOS -->
+<div class="section">
+<h2>🥤 Refrigerantes & Energéticos</h2>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+</div>
+
+<!-- 🧰 ACESSÓRIOS -->
+<div class="section">
+<h2>🧰 Acessórios</h2>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+
+<div class="item" data-name="Skol" data-price="3.5"><img src="img/skol.jpg"><div class="info"><h3>Skol Lata 350ml</h3><p>Leve e gelada</p><div class="price">R$ 3,50</div></div><div class="qty-box"><button onclick="changeQty(this,-1)">➖</button><div class="qty">0</div><button onclick="changeQty(this,1)">➕</button></div></div>
+</div>
+
+<a id="whatsappFooter" onclick="startOrder()">
+  <span class="left">
+    <img src="img/whatsapp.png">
+    <strong id="ctaText">Selecione os itens</strong>
+  </span>
+
+  <span class="right">
+    <span id="totalValue">R$ 0,00</span>
+    <span id="badge">0</span>
+  </span>
+</a>
+
+
+<div id="paymentModal">
+  <div class="modal-box">
+
+    <h3 id="modalTitle">Forma de pagamento</h3>
+
+    <!-- Opções iniciais -->
+    <div id="paymentOptions">
+      <button onclick="choosePayment('PIX')">💸 PIX</button>
+      <button onclick="choosePayment('Dinheiro')">💵 Dinheiro</button>
+      <button onclick="choosePayment('Cartão')">💳 Cartão</button>
+    </div>
+
+    <!-- Dinheiro -->
+    <div id="cashOptions" class="hidden">
+      <p>Precisa de troco?</p>
+      <input type="number" id="trocoValor" placeholder="Troco para quanto?">
+      <button onclick="confirmCash()">Confirmar</button>
+    </div>
+
+    <!-- Cartão -->
+    <div id="cardOptions" class="hidden">
+      <p>Tipo de cartão</p>
+      <button onclick="confirmCard('Crédito')">Crédito</button>
+      <button onclick="confirmCard('Débito')">Débito</button>
+    </div>
+
+    <span class="close" onclick="closePayment()">Cancelar</span>
+
+  </div>
+</div>
+
+
+<script>
+let order = {};
+let paymentMethod = "";
+let paymentDetail = "";
+
+
+
+function updateFooter() {
+  let totalItems = 0;
+  let totalValue = 0;
+
+  for (let item in order) {
+    totalItems += order[item].qty;
+    totalValue += order[item].price * order[item].qty;
+  }
+
+  const badge = document.getElementById("badge");
+  const cta = document.getElementById("ctaText");
+  const total = document.getElementById("totalValue");
+
+  if (totalItems > 0) {
+    badge.style.display = "flex";
+    badge.innerText = totalItems;
+    cta.innerText = `Finalizar pedido (${totalItems} itens)`;
+    total.innerText = `R$ ${totalValue.toFixed(2)}`;
+
+    // 🔔 animação pulse
+    badge.classList.remove("pulse");
+    void badge.offsetWidth;
+    badge.classList.add("pulse");
+  } else {
+    badge.style.display = "none";
+    cta.innerText = "Selecione os itens";
+    total.innerText = "R$ 0,00";
+  }
+}
+
+function changeQty(btn, delta) {
+  const item = btn.closest('.item');
+  const name = item.dataset.name;
+  const price = parseFloat(item.dataset.price);
+  const qtyDiv = item.querySelector('.qty');
+
+  let qty = parseInt(qtyDiv.innerText) + delta;
+  if (qty < 0) qty = 0;
+
+  qtyDiv.innerText = qty;
+
+  if (qty === 0) {
+    delete order[name];
+  } else {
+    order[name] = { price, qty };
+  }
+
+  // ✨ animação leve no card
+  item.classList.remove("animate");
+  void item.offsetWidth; // reset animation
+  item.classList.add("animate");
+
+  updateFooter();
+}
+
+
+function choosePayment(method) {
+  paymentMethod = method;
+
+  document.getElementById("paymentOptions").classList.add("hidden");
+
+  if (method === "Dinheiro") {
+    document.getElementById("cashOptions").classList.remove("hidden");
+  } 
+  else if (method === "Cartão") {
+    document.getElementById("cardOptions").classList.remove("hidden");
+  } 
+  else {
+    paymentDetail = "";
+    openWhatsApp();
+    closePayment();
+  }
+}
+
+function confirmCash() {
+  const troco = document.getElementById("trocoValor").value;
+  paymentDetail = troco ? `Troco para R$ ${parseFloat(troco).toFixed(2)}` : "Sem troco";
+  closePayment();
+  openWhatsApp();
+}
+
+function confirmCard(type) {
+  paymentDetail = type;
+  closePayment();
+  openWhatsApp();
+}
+
+function closePayment() {
+  document.getElementById("paymentModal").style.display = "none";
+  document.getElementById("paymentOptions").classList.remove("hidden");
+  document.getElementById("cashOptions").classList.add("hidden");
+  document.getElementById("cardOptions").classList.add("hidden");
+  document.getElementById("trocoValor").value = "";
+}
+
+
+function openWhatsApp() {
+  let message = "Olá! Quero fazer o pedido:%0A";
+  let total = 0;
+
+  for (let item in order) {
+    let subtotal = order[item].price * order[item].qty;
+    total += subtotal;
+    message += `• ${item} (${order[item].qty}x) - R$ ${subtotal.toFixed(2)}%0A`;
+  }
+
+  message += `%0ATotal: R$ ${total.toFixed(2)}`;
+  message += `%0AForma de pagamento: ${paymentMethod}`;
+
+  if (paymentDetail) {
+    message += ` (${paymentDetail})`;
+  }
+
+  window.open(
+    "https://wa.me/5522999395668?text=" + message,
+    "_blank"
+  );
+}
+
+function startOrder() {
+  if (Object.keys(order).length === 0) {
+    alert("Selecione pelo menos um item 🍻");
+    return;
+  }
+
+  document.getElementById("paymentModal").style.display = "flex";
+}
+
+
+</script>
+
+
+</body>
+</html>
